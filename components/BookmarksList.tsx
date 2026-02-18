@@ -111,7 +111,7 @@ export default function BookmarksList({
 
   return (
     <div>
-      {/* ✅ PERFECT HEADER */}
+      {/* PERFECT HEADER */}
       <div
         style={{
           marginBottom: "2rem",

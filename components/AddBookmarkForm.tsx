@@ -13,19 +13,16 @@ export default function AddBookmarkForm({
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ✅ SUPER FLEXIBLE URL NORMALIZER - Accepts ALL formats
   const normalizeUrl = (input: string): string => {
     let normalized = input.trim();
 
-    // Remove markdown brackets [text](url)
     normalized = normalized.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 
-    // Handle ALL URL types intelligently:
     const urlPatterns = [
-      { test: /^www\./i, replace: "https://$&" }, // www.google.com
-      { test: /^ftp\./i, replace: "ftp://$&" }, // ftp.files.com
-      { test: /^[a-z0-9.-]+\.[a-z]{2,}$/i, replace: "https://$&" }, // google.com
-      { test: /^([a-z]+):\/\//i, replace: "$1://" }, // Already has protocol
+      { test: /^www\./i, replace: "https://$&" },
+      { test: /^ftp\./i, replace: "ftp://$&" },
+      { test: /^[a-z0-9.-]+\.[a-z]{2,}$/i, replace: "https://$&" },
+      { test: /^([a-z]+):\/\//i, replace: "$1://" },
     ];
 
     for (const pattern of urlPatterns) {
@@ -34,15 +31,12 @@ export default function AddBookmarkForm({
       }
     }
 
-    // Final fallback
     return "https://" + normalized;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
-    // ✅ NORMALIZE URL before saving
     const normalizedUrl = normalizeUrl(url);
 
     const { error } = await supabase
@@ -52,7 +46,7 @@ export default function AddBookmarkForm({
     if (!error) {
       setTitle("");
       setUrl("");
-      onBookmarkAdded?.(); // ✅ Triggers parent refresh
+      onBookmarkAdded?.();
       console.log("✅ Added bookmark:", normalizedUrl);
     } else {
       console.error("❌ Add error:", error);
@@ -95,7 +89,7 @@ export default function AddBookmarkForm({
           onBlur={(e) => (e.target.style.borderColor = "#ddd")}
           required
         />
-        {/* ✅ CHANGED: type="text" + Better placeholder */}
+        {/* CHANGED: type="text" + Better placeholder */}
         <input
           type="text"
           value={url}
@@ -116,7 +110,7 @@ export default function AddBookmarkForm({
           required
         />
 
-        {/* ✅ URL PREVIEW */}
+        {/*  URL PREVIEW */}
         {url && (
           <div
             style={{
